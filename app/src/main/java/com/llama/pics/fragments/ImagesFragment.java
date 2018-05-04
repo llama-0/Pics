@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
@@ -47,8 +48,8 @@ public class ImagesFragment extends Fragment {
 
         mAdapter = new ImageRecordsAdapter(getActivity());
 
-        ListView listView = getView().findViewById(R.id.list);
-        listView.setAdapter(mAdapter);
+        GridView gridView = getView().findViewById(R.id.list);
+        gridView.setAdapter(mAdapter);
 
         fetchData();
     }
