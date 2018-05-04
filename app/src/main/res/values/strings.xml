@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Pics</string>
-    <string name="my_token">dummy_token</string>
+    <string name="my_token">your_test_token</string>
     <string name="BASE_URL">https://cloud-api.yandex.net/v1/disk/</string>
 </resources>
