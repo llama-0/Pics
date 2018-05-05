@@ -6,10 +6,11 @@ package com.llama.pics.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -19,44 +20,75 @@ import com.llama.pics.utils.VolleySingleton;
 
 import java.util.List;
 
-public class ImageRecordsAdapter extends ArrayAdapter<ImageRecord> {
+public class ImageRecordsAdapter extends RecyclerView.Adapter<ImageRecordsAdapter
+        .ImageViewHolder> {
+
+    private Context mCtx;
+    private List<ImageRecord> mImageRecords;
 
     private final ImageLoader mImageLoader;
 
-    public ImageRecordsAdapter(@NonNull Context context) {
-        super(context, R.layout.image_list_item);
+    public ImageRecordsAdapter(@NonNull Context mCtx, List<ImageRecord> mImageRecords) {
 
-        mImageLoader = VolleySingleton.getInstance(getContext()).getImageLoader();
+        this.mCtx = mCtx;
+        this.mImageRecords = mImageRecords;
+
+        mImageLoader = VolleySingleton.getInstance(mCtx).getImageLoader();
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.image_list_item, parent, false);
-        }
-
-        // instead of using viewholder
-        NetworkImageView imageView = convertView.findViewById(R.id.image);
-
-        ImageRecord imageRecord = getItem(position);
-
-        if (imageRecord != null) {
-            imageView.setImageUrl(imageRecord.getUrl(), mImageLoader);
-        }
-
-        return convertView;
+    public ImageRecordsAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view;
+        LayoutInflater layoutInflater = LayoutInflater.from(mCtx); // may be parent.getContext();
+        view = layoutInflater.inflate(R.layout.image_list_item, parent, false);
+        return new ImageViewHolder(view);
     }
 
-    //This clears the existing data, adds all the new records,
-    // and notifies the adapter that the underlying data has been updated.
-    public void swapImageRecords(List<ImageRecord> objects) {
-        clear();
 
-        for(ImageRecord object : objects) {
-            add(object);
+    @Override
+    public void onBindViewHolder(@NonNull ImageRecordsAdapter.ImageViewHolder holder, int position) {
+
+        ImageRecord imageRecord = this.mImageRecords.get(position);
+
+        if (imageRecord != null) {
+            holder.imageView.setImageUrl(imageRecord.getUrl(), mImageLoader);
+        }
+    }
+
+    public void swap(List<ImageRecord> imageRecords)
+    {
+        if(imageRecords == null || imageRecords.size()==0)
+            return;
+        if (mImageRecords != null && mImageRecords.size()>0)
+            mImageRecords.clear();
+        assert mImageRecords != null;
+        mImageRecords.addAll(imageRecords);
+        notifyDataSetChanged();
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return mImageRecords.size();
+    }
+
+    public static class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        NetworkImageView imageView;
+
+        public ImageViewHolder(View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.image);
         }
 
-        notifyDataSetChanged();
+        @Override
+        public void onClick(View v) {
+
+            if (this.imageView != null) {
+                Toast.makeText(v.getContext(), "Clicked on " + this.imageView, Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 }
