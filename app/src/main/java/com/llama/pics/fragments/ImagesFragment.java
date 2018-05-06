@@ -6,21 +6,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.GridView;
-import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.llama.pics.MainActivity;
 import com.llama.pics.R;
 import com.llama.pics.adapters.ImageRecordsAdapter;
 import com.llama.pics.model.ImageRecord;
@@ -35,10 +30,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ImagesFragment extends Fragment {
+import static com.llama.pics.MainActivity.EXTRA_URL;
+
+public class ImagesFragment extends Fragment implements ImageRecordsAdapter.ImageItemClickListener{
 
     private ImageRecordsAdapter mAdapter;
     private List<ImageRecord> imageRecords;
+   // private ImageRecordsAdapter.ImageItemClickListener imageItemClickListener;
+
+    private static final int NUMBER_OF_COLUMNS = 2;
 
     public ImagesFragment() {
     }
@@ -59,9 +59,9 @@ public class ImagesFragment extends Fragment {
 
         RecyclerView recyclerView = getView().findViewById(R.id.my_recycler_view);
         //recyclerView.setHasFixedSize(true);
-        //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), R.string.number_of_columns));
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), NUMBER_OF_COLUMNS));
         recyclerView.setAdapter(mAdapter);
+        mAdapter.setImageItemClickListener(this);
 
         fetchData();
         System.out.println("RESULT data is fetched");
@@ -80,6 +80,8 @@ public class ImagesFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         // do something
                         try {
+                            //TODO: убрать manageResponce(), прописать код здесь, просто добавить в конце после добавления элемента к списку mAdapter.notifyDataSetChanged
+                            // TODO: тогда можно будет избавиться от приблуды со swap, которая redundancy. ЭТО НЕ ТОЧНО :(
                             //manageResponse(response);
                             List<ImageRecord> imageRecords = manageResponse(response);
                             mAdapter.swap(imageRecords);
@@ -132,5 +134,23 @@ public class ImagesFragment extends Fragment {
             }
         }
         return records;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
+        // pass data from this fragment to ImageDetailFragment
+        ImageRecord imageRecord = imageRecords.get(position);
+        EXTRA_URL = imageRecord.getUrl();
+
+        System.out.println("EXTRA_URL in the first fragment" + EXTRA_URL);
+
+        // open ImageDetailFragment from this fragment
+        ImageDetailFragment imageDetailFragment = new ImageDetailFragment();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, imageDetailFragment)
+                .addToBackStack(null).commit();
+
+        System.out.println("New fragment started");
     }
 }

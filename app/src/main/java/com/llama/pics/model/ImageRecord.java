@@ -1,5 +1,6 @@
 package com.llama.pics.model;
 
+
 public class ImageRecord {
 
     private String url;
@@ -11,5 +12,4 @@ public class ImageRecord {
     public String getUrl() {
         return url;
     }
-
 }

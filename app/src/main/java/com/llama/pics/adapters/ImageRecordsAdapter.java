@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -26,7 +25,17 @@ public class ImageRecordsAdapter extends RecyclerView.Adapter<ImageRecordsAdapte
     private Context mCtx;
     private List<ImageRecord> mImageRecords;
 
-    private final ImageLoader mImageLoader;
+    private ImageLoader mImageLoader;
+    private ImageItemClickListener imageItemClickListener;
+
+    // to handle clicks on images
+    public interface ImageItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setImageItemClickListener(ImageItemClickListener listener) {
+        imageItemClickListener = listener;
+    }
 
     public ImageRecordsAdapter(@NonNull Context mCtx, List<ImageRecord> mImageRecords) {
 
@@ -40,16 +49,16 @@ public class ImageRecordsAdapter extends RecyclerView.Adapter<ImageRecordsAdapte
     @Override
     public ImageRecordsAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        LayoutInflater layoutInflater = LayoutInflater.from(mCtx); // may be parent.getContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(mCtx);
         view = layoutInflater.inflate(R.layout.image_list_item, parent, false);
         return new ImageViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull ImageRecordsAdapter.ImageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ImageRecordsAdapter.ImageViewHolder holder, int position) {
 
-        ImageRecord imageRecord = this.mImageRecords.get(position);
+        final ImageRecord imageRecord = this.mImageRecords.get(position);
 
         if (imageRecord != null) {
             holder.imageView.setImageUrl(imageRecord.getUrl(), mImageLoader);
@@ -73,22 +82,25 @@ public class ImageRecordsAdapter extends RecyclerView.Adapter<ImageRecordsAdapte
         return mImageRecords.size();
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ImageViewHolder extends RecyclerView.ViewHolder {
 
         NetworkImageView imageView;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image);
-        }
 
-        @Override
-        public void onClick(View v) {
-
-            if (this.imageView != null) {
-                Toast.makeText(v.getContext(), "Clicked on " + this.imageView, Toast.LENGTH_SHORT).show();
-
-            }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (imageItemClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            imageItemClickListener.onItemClick(position) ;
+                        }
+                    }
+                }
+            });
         }
     }
 }
