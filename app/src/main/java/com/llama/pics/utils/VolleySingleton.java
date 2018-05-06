@@ -48,13 +48,6 @@ public class VolleySingleton {
     private RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
-            // If there is a need to use disk based cache
-            /*
-            Cache cache = new DiskBasedCache(mCtx.getCacheDir(), 10 * 1024 * 1024);
-            Network network = new BasicNetwork(new HurlStack());
-            mRequestQueue = new RequestQueue(cache, network);
-            mRequestQueue.start();
-*/
         }
         return mRequestQueue;
     }

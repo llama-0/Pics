@@ -36,7 +36,6 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
 
     private ImageRecordsAdapter mAdapter;
     private List<ImageRecord> imageRecords;
-   // private ImageRecordsAdapter.ImageItemClickListener imageItemClickListener;
 
     private static final int NUMBER_OF_COLUMNS = 2;
 
@@ -58,19 +57,16 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
         mAdapter = new ImageRecordsAdapter(getActivity(), imageRecords);
 
         RecyclerView recyclerView = getView().findViewById(R.id.my_recycler_view);
-        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), NUMBER_OF_COLUMNS));
         recyclerView.setAdapter(mAdapter);
         mAdapter.setImageItemClickListener(this);
 
         fetchData();
-        System.out.println("RESULT data is fetched");
     }
 
     private void fetchData() {
         String url = getString(R.string.BASE_URL);
         String part_of_url_to_download_a_file = "resources/?path=Загрузки/";
-        //String part_of_url_to_download_a_file = "resources/?path=Загрузки/&preview_size=S";
 
         final String token = getString(R.string.my_token);
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
@@ -78,15 +74,9 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // do something
                         try {
-                            //TODO: убрать manageResponce(), прописать код здесь, просто добавить в конце после добавления элемента к списку mAdapter.notifyDataSetChanged
-                            // TODO: тогда можно будет избавиться от приблуды со swap, которая redundancy. ЭТО НЕ ТОЧНО :(
-                            //manageResponse(response);
                             List<ImageRecord> imageRecords = manageResponse(response);
                             mAdapter.swap(imageRecords);
-                            System.out.println("TST url is passed in request");
-                            //mAdapter.swapImageRecords(imageRecords);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -122,14 +112,9 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
                 String mime_type = jsonObject.getString("mime_type");
                 if (mime_type.compareTo("image/jpeg") == 0 || mime_type.compareTo("image/png") == 0) {
 
-                    // just testing
-                    // System.out.println(response.toString());
-
-                    // set to "preview" next time
                     String url = jsonObject.getString("file");
                     ImageRecord record = new ImageRecord(url);
                     records.add(record);
-                    System.out.println("TEST url was added to the list");
                 }
             }
         }
@@ -143,14 +128,10 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
         ImageRecord imageRecord = imageRecords.get(position);
         EXTRA_URL = imageRecord.getUrl();
 
-        System.out.println("EXTRA_URL in the first fragment" + EXTRA_URL);
-
         // open ImageDetailFragment from this fragment
         ImageDetailFragment imageDetailFragment = new ImageDetailFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, imageDetailFragment)
                 .addToBackStack(null).commit();
-
-        System.out.println("New fragment started");
     }
 }

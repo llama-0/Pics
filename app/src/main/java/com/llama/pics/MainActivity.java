@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.llama.pics.fragments.ImagesFragment;
-import com.llama.pics.fragments.ImagesFragmentCopy;
 
 public class MainActivity extends AppCompatActivity {
 
