@@ -3,16 +3,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/image_list_name_decor"
-        android:id="@+id/text_view"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:background="@color/colorPrimary"
-        android:padding="10dp"/>
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"

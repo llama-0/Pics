@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,10 +34,17 @@ public class ImageDetailFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Toolbar toolbar = getView().findViewById(R.id.toolbar_detailed);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+
+
         // get the data -- display image
         mImageLoader = VolleySingleton.getInstance(getContext()).getImageLoader();
         NetworkImageView imageView = getView().findViewById(R.id.imageView);
         System.out.println("EXTRA_URL variable in second fragment " + EXTRA_URL);
         imageView.setImageUrl(EXTRA_URL, mImageLoader);
     }
+
 }
