@@ -27,6 +27,7 @@ public class ImageDetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_image_detail, container, false);
     }
 
@@ -37,14 +38,25 @@ public class ImageDetailFragment extends Fragment {
         Toolbar toolbar = getView().findViewById(R.id.toolbar_detailed);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
 
         // get the data -- display image
         mImageLoader = VolleySingleton.getInstance(getContext()).getImageLoader();
         NetworkImageView imageView = getView().findViewById(R.id.imageView);
-        System.out.println("EXTRA_URL variable in second fragment " + EXTRA_URL);
         imageView.setImageUrl(EXTRA_URL, mImageLoader);
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
