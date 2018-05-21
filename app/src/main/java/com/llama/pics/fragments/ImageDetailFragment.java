@@ -41,7 +41,6 @@ public class ImageDetailFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-
         // get the data -- display image
         mImageLoader = VolleySingleton.getInstance(getContext()).getImageLoader();
         NetworkImageView imageView = getView().findViewById(R.id.imageView);
