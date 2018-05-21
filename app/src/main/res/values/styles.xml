@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Theme of toolbar_detailed -->
+    <style name="DetailedToolbarTheme" parent="Theme.AppCompat.NoActionBar">
+
+    </style>
+
 </resources>
