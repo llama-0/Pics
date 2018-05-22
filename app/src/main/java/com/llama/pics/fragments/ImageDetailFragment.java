@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ShareActionProvider;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -22,6 +25,7 @@ import static com.llama.pics.MainActivity.EXTRA_URL;
 public class ImageDetailFragment extends Fragment {
 
     private ImageLoader mImageLoader;
+    private ShareActionProvider mShareActionProvider;
 
     public ImageDetailFragment() { }
 
@@ -56,6 +60,12 @@ public class ImageDetailFragment extends Fragment {
         imageView.setImageUrl(EXTRA_URL, mImageLoader);
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate menu resource file
+        inflater.inflate(R.menu.menu, menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
