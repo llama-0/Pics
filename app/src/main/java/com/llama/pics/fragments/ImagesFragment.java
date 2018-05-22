@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -27,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +42,7 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
 
     private ImageRecordsAdapter mAdapter;
     private List<ImageRecord> imageRecords;
+    private TextView mDateTimeView;
 
     private static final int NUMBER_OF_COLUMNS = 2;
 
@@ -57,6 +62,9 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
         Toolbar toolbar = getView().findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+        mDateTimeView = getView().findViewById(R.id.date_time_view);
+        getDateTime();
+
         imageRecords = new ArrayList<>();
 
         mAdapter = new ImageRecordsAdapter(getActivity(), imageRecords);
@@ -67,6 +75,11 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
         mAdapter.setImageItemClickListener(this);
 
         fetchData();
+    }
+
+    private void getDateTime() {
+        Date date = new Date();
+        mDateTimeView.setText(DateFormat.getDateTimeInstance().format(date));
     }
 
     private void fetchData() {
