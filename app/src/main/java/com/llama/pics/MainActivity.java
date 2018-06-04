@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add fragments
 
-        adapter.addFragment(new ImagesFragment(), "Images");
+        adapter.addFragment(new ImagesFragment(), "Photos");
         adapter.addFragment(new FavoriteImagesFragment(), "Favorite");
 
         viewPager.setAdapter(adapter);
