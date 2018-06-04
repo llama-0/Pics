@@ -42,7 +42,7 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
 
     private ImageRecordsAdapter mAdapter;
     private List<ImageRecord> imageRecords;
-    private TextView mDateTimeView;
+   // private TextView mDateTimeView;
 
     private static final int NUMBER_OF_COLUMNS = 2;
 
@@ -59,12 +59,12 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Toolbar toolbar = getView().findViewById(R.id.toolbar);
+       /* Toolbar toolbar = getView().findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         mDateTimeView = getView().findViewById(R.id.date_time_view);
         getDateTime();
-
+*/
         imageRecords = new ArrayList<>();
 
         mAdapter = new ImageRecordsAdapter(getActivity(), imageRecords);
@@ -77,10 +77,10 @@ public class ImagesFragment extends Fragment implements ImageRecordsAdapter.Imag
         fetchData();
     }
 
-    private void getDateTime() {
+    /*private void getDateTime() {
         Date date = new Date();
         mDateTimeView.setText(DateFormat.getDateTimeInstance().format(date));
-    }
+    }*/
 
     private void fetchData() {
         String url = getString(R.string.BASE_URL);
